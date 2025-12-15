@@ -1,6 +1,11 @@
 package org.example;
 
-public class User {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
+class Users {
+    @Id
     private String uid;
     private String name;
     private String email;
@@ -45,5 +50,16 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid='" + uid + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

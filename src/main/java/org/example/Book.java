@@ -1,6 +1,6 @@
 package org.example;
 
-public class Book {
+class Book {
     private String bid;
     private String title;
     private String genre;
