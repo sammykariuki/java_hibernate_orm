@@ -2,15 +2,21 @@ package org.example;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-class Users {
+class AppUser {
     @Id
     private String uid;
     private String name;
     private String email;
     private String password;
     private String role;
+    @OneToMany(mappedBy = "author")
+    private List<Blog> blogs = new ArrayList<>();
 
     public String getUid() {
         return uid;
@@ -50,6 +56,14 @@ class Users {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Blog> getBlogs() {
+        return blogs;
+    }
+    public void addBlog(Blog blog) {
+        blogs.add(blog);
+        blog.setAuthor(this);
     }
 
     @Override
