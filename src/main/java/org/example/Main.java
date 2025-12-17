@@ -1,62 +1,91 @@
 package org.example;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.exception.ConstraintViolationException;
+
 import java.util.Scanner;
 
 public class Main {
+    static Scanner scanner = new Scanner(System.in);
     static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("-------");
-        System.out.println("PostNet");
-        System.out.println("-------");
-        System.out.println("Welcome to Postnet");
-        System.out.println("Create an account and get to upload blogs and view others blogs.");
-        System.out.println("****************************************************************");
-        System.out.println(" ------------------- ");
-        System.out.print("| Name: ");
-        AppUser u1 = new AppUser();
-        u1.setName("Alexander");
-        u1.setEmail("alex@email.com");
-        u1.setPassword("1234");
-        u1.setRole("user");
-        System.out.println(u1.toString());
-
-        Blog b1 = new Blog();
-        b1.setTitle("Alexander 101");
-        b1.setContent("How does a day in the life of alex looks like?" +
-                "My Day starts at 5 AM where I ...");
-        b1.setGenre("Biography");
-        b1.setAuthor(u1);
-
         Configuration config = new Configuration();
         config.addAnnotatedClass(AppUser.class);
         config.addAnnotatedClass(Blog.class);
         config.configure();
-
         SessionFactory factory = config.buildSessionFactory();
-        Session session = factory.openSession();
 
-        //Use transaction only for insert,update,delete not read
-        Transaction transaction = session.beginTransaction();
+        String option;
+        boolean exit = false;
+        System.out.println("**********");
+        System.out.println("PostNet📰");
+        System.out.println("**********");
+        System.out.println("Welcome to Post net, your Blog centre");
+        System.out.println("-------------------------------------");
 
-        //create
-        session.persist(u1);
-        session.persist(b1);
-        //read
-        //session.find(Users.class, "12w3-4y02");
-        //update
-        //session.merge(u1);
-        //delete
-        //Users uToDelete = session.find(Users.class, "12w3-4y02");
-        //session.remove(uToDelete);
-
-        transaction.commit();
-
-        session.close();
+        while(!exit){
+        System.out.println("1. Create an account and get to upload blogs and view others blogs.");
+        System.out.println("2. Already have an account? Log in");
+        System.out.print("3. Exit? (1-3): ");
+        option = scanner.nextLine();
+        switch (option) {
+            case "1" -> createAccount(factory);
+            case "2" -> {}
+            case "3" -> exit = true;
+            default -> {
+                System.out.println("--------------");
+                System.out.println("Invalid Choice");
+                System.out.println("--------------");
+            }
+        }
+        }
         factory.close();
         scanner.close();
 
     }
-}
+    static void createAccount(SessionFactory factory) {
+        String name = "";
+        String email = "";
+        String password = "";
+        while(name.isEmpty()){
+        System.out.print("Enter your name: ");
+        name = scanner.nextLine();
+        }
+        while(email.isEmpty()){
+            System.out.print("Enter your email: ");
+            email = scanner.nextLine();
+            if(!email.contains("@") || !email.contains(".")){
+                System.out.println("Invalid email address");
+                email = "";
+            }
+        }
+        while (password.isEmpty()) {
+            System.out.print("Enter your password: ");
+            password = scanner.nextLine();
+        }
+        AppUser u1 = new AppUser();
+        u1.setName(name);
+        u1.setEmail(email);
+        u1.setPassword(password);
+        Session session = factory.openSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            session.persist(u1);
+            transaction.commit();
+            System.out.println("Account created successfully");
+        } catch (org.hibernate.HibernateException ex) { //here we are handling the exception in general
+            transaction.rollback();
+
+            if (ex instanceof org.hibernate.exception.ConstraintViolationException) { //here we specify so that if the exeption is email related we give detailed description
+                System.out.println("Email already exists");
+            } else {
+                System.out.println("Unexpected database error"); //here we handle any other ensuring our program doesn't crash
+                //ex.printStackTrace();
+            }
+        } finally {
+        session.close();
+        }
+    }
+    }

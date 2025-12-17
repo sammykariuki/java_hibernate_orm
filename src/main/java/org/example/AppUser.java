@@ -12,10 +12,10 @@ public class AppUser {
     @GeneratedValue
     @Column(updatable = false, nullable = false)
     private UUID uid;
-    private String name = "John Doe";
+    private String name;
     @Column(nullable = false, unique = true)
     private String email;
-    private String password = "1234";
+    private String password;
     private String role = "user";
     @OneToMany(mappedBy = "author")
     private List<Blog> blogs = new ArrayList<>();
