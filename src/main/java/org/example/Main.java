@@ -3,23 +3,31 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import java.util.Scanner;
 
 public class Main {
     static void main(String[] args) {
-        System.out.println("Hello");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("-------");
+        System.out.println("PostNet");
+        System.out.println("-------");
+        System.out.println("Welcome to Postnet");
+        System.out.println("Create an account and get to upload blogs and view others blogs.");
+        System.out.println("****************************************************************");
+        System.out.println(" ------------------- ");
+        System.out.print("| Name: ");
         AppUser u1 = new AppUser();
-        u1.setUid("12w3-4y02");
-        u1.setName("Joseph");
-        u1.setEmail("jose@email.com");
+        u1.setName("Alexander");
+        u1.setEmail("alex@email.com");
         u1.setPassword("1234");
         u1.setRole("user");
         System.out.println(u1.toString());
 
         Blog b1 = new Blog();
-        b1.setBid("37x2-2y02");
-        b1.setTitle("Blog 1");
-        b1.setContent("This is the first blog");
-        b1.setGenre("Action");
+        b1.setTitle("Alexander 101");
+        b1.setContent("How does a day in the life of alex looks like?" +
+                "My Day starts at 5 AM where I ...");
+        b1.setGenre("Biography");
         b1.setAuthor(u1);
 
         Configuration config = new Configuration();
@@ -48,6 +56,7 @@ public class Main {
 
         session.close();
         factory.close();
+        scanner.close();
 
     }
 }

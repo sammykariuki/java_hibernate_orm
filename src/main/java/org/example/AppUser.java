@@ -1,30 +1,25 @@
 package org.example;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
-class AppUser {
+public class AppUser {
     @Id
-    private String uid;
-    private String name;
+    @GeneratedValue
+    @Column(updatable = false, nullable = false)
+    private UUID uid;
+    private String name = "John Doe";
+    @Column(nullable = false, unique = true)
     private String email;
-    private String password;
-    private String role;
+    private String password = "1234";
+    private String role = "user";
     @OneToMany(mappedBy = "author")
     private List<Blog> blogs = new ArrayList<>();
 
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 
     public String getName() {
         return name;

@@ -1,28 +1,32 @@
 package org.example;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.UUID;
+import java.time.Instant;
 
 @Entity
-class Blog {
+public class Blog {
     @Id
-    private String bid;
-    private String title;
-    private String content;
-    private String genre;
+    @GeneratedValue
+    @Column(updatable = false, nullable = false)
+    private UUID bid;
+    private String title = "Default Title";
+    private String content = "Default Content";
+    private String genre = "Default Genre";
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Instant updatedAt;
     @ManyToOne
     @JoinColumn(name = "author_id")
     private AppUser author;
 
-    public String getBid() {
-        return bid;
-    }
-
-    public void setBid(String bid) {
-        this.bid = bid;
-    }
 
     public String getTitle() {
         return title;
