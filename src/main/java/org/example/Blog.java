@@ -3,7 +3,6 @@ package org.example;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 import java.time.Instant;
@@ -14,9 +13,9 @@ public class Blog {
     @GeneratedValue
     @Column(updatable = false, nullable = false)
     private UUID bid;
-    private String title = "Default Title";
-    private String content = "Default Content";
-    private String genre = "Default Genre";
+    private String title;
+    private String content;
+    private String genre;
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;

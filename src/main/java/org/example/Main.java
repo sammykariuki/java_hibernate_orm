@@ -1,10 +1,8 @@
 package org.example;
-import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.Scanner;
 
@@ -122,6 +120,7 @@ public class Main {
                     System.out.println("----------------");
                     System.out.println("Login Successful");
                     System.out.println("----------------");
+                    PostNet.PostMain(user, factory, scanner);
                 } else {
                     System.out.println("--------------------");
                     System.out.println("Invalid credentials");

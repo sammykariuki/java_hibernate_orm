@@ -19,9 +19,12 @@ public class AppUser {
     private String email;
     private String password;
     private String role = "user";
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Blog> blogs = new ArrayList<>();
 
+    public UUID getUid() {
+        return uid;
+    }
 
     public String getName() {
         return name;
