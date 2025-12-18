@@ -32,7 +32,7 @@ public class Main {
         option = scanner.nextLine();
         switch (option) {
             case "1" -> createAccount(factory);
-            case "2" -> {}
+            case "2" -> login(factory);
             case "3" -> exit = true;
             default -> {
                 System.out.println("--------------");
@@ -55,7 +55,7 @@ public class Main {
         }
         while(email.isEmpty()){
             System.out.print("Enter your email: ");
-            email = scanner.nextLine();
+            email = scanner.nextLine().toLowerCase();
             if(!email.contains("@") || !email.contains(".")){
                 System.out.println("Invalid email address");
                 email = "";
@@ -88,4 +88,54 @@ public class Main {
         session.close();
         }
     }
+    static void login(SessionFactory factory) {
+        String email = "";
+        String password = "";
+
+        while (email.isEmpty()) {
+            System.out.print("Enter your email: ");
+            email = scanner.nextLine().toLowerCase();
+
+            if(!email.contains("@") || !email.contains(".")){
+                System.out.println("--------------");
+                System.out.println("Invalid email");
+                System.out.println("--------------");
+                email = "";
+            }
+        }
+        while (password.isEmpty()) {
+            System.out.print("Enter your password: ");
+            password = scanner.nextLine();
+        }
+        Session session = factory.openSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            AppUser user = session.byNaturalId(AppUser.class).using("email", email).load();
+            transaction.commit();
+            if(user == null){
+                System.out.println("--------------------");
+                System.out.println("Invalid credentials");
+                System.out.println("--------------------");
+            } else {
+                String userPassword = user.getPassword();
+                if(password.equals(userPassword)){
+                    System.out.println("----------------");
+                    System.out.println("Login Successful");
+                    System.out.println("----------------");
+                } else {
+                    System.out.println("--------------------");
+                    System.out.println("Invalid credentials");
+                    System.out.println("--------------------");
+                }
+            }
+
+        } catch (org.hibernate.HibernateException ex) {
+            transaction.rollback();
+            System.out.println("An Error Occured");
+            //ex.printStackTrace();
+
+        } finally {
+            session.close();
+        }
     }
+}

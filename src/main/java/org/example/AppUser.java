@@ -1,6 +1,7 @@
 package org.example;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public class AppUser {
     @Column(updatable = false, nullable = false)
     private UUID uid;
     private String name;
+    @NaturalId
     @Column(nullable = false, unique = true)
     private String email;
     private String password;
